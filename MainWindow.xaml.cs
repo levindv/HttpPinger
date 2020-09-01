@@ -47,6 +47,7 @@ namespace HttpPinger
             {
                 Parallel.ForEach(localTraces, t => ThreadPool.QueueUserWorkItem(HttpPing, t));
             }
+            Dispatcher.Invoke(SaveAll);
         }
 
         private void HttpPing(object state)
@@ -80,13 +81,18 @@ namespace HttpPinger
                 Traces.Add(trace);
             }
 
+            SaveAll();
+        }
+
+        private void SaveAll()
+        {
             File.WriteAllText(settsPath, JsonConvert.SerializeObject(Traces));
         }
 
         private void RemoveAddress_Click(object sender, RoutedEventArgs e)
         {
             Traces.Remove(CurrentTrace);
-            File.WriteAllText(settsPath, JsonConvert.SerializeObject(Traces));
+            SaveAll();
         }
 
         private void DataGrid_MouseRightButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)

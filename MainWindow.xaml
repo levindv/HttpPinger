@@ -5,9 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" Title="Htttp Pinger" Height="450" Width="800">
     <Grid>
-        <DataGrid ItemsSource="{Binding Traces}" MouseRightButtonDown="DataGrid_MouseRightButtonDown" CurrentItem="{Binding CurrentTrace}" AutoGenerateColumns="false">
+        <DataGrid ItemsSource="{Binding Traces}" MouseRightButtonDown="DataGrid_MouseRightButtonDown" CurrentItem="{Binding CurrentTrace, Mode=OneWayToSource}"
+                  AutoGenerateColumns="false" CanUserAddRows="False">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Url" Binding="{Binding Address}" Width="Auto" />
+                <DataGridTextColumn Header="Url" Binding="{Binding Address}" Width="Auto" IsReadOnly="True" />
                 <DataGridTemplateColumn Header="History" Width="*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -19,7 +20,7 @@
                                 </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <TextBlock Background="{Binding StatusColor}" Text="." />
+                                        <TextBlock Background="{Binding StatusColor}" Text=" " />
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
