@@ -86,6 +86,11 @@ namespace HttpPinger
 
         private void SaveAll()
         {
+            var file = new FileInfo(settsPath);
+            if (!file.Directory.Exists)
+            {
+                file.Directory.Create();
+            }
             File.WriteAllText(settsPath, JsonConvert.SerializeObject(Traces));
         }
 
