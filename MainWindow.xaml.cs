@@ -35,8 +35,8 @@ namespace HttpPinger
             {
                 Traces = new ObservableCollection<TraceVM>();
             }
-            _timer = new Timer(DoPing, null, 1000, 1000);
-            _client = new HttpClient();
+            _timer = new Timer(DoPing, null, 1000, 500);
+            _client = new HttpClient(new HttpClientHandler() { ServerCertificateCustomValidationCallback = (a, s, d, f) => true });
         }
 
         private void DoPing(object state)
@@ -45,7 +45,11 @@ namespace HttpPinger
             Dispatcher.Invoke(() => localTraces = Traces?.ToArray());
             if (localTraces != null)
             {
-                Parallel.ForEach(localTraces, t => ThreadPool.QueueUserWorkItem(HttpPing, t));
+                var res = Parallel.ForEach(localTraces, t => ThreadPool.QueueUserWorkItem(HttpPing, t));
+                while (!res.IsCompleted)
+                {
+                    Thread.Sleep(10);
+                }
             }
             Dispatcher.Invoke(SaveAll);
         }
